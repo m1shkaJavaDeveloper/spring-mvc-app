@@ -4,10 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.zharov.springapp.dao.PersonDAO;
+import ru.zharov.springapp.models.Person;
 
 @Controller
 @RequestMapping("/people")
@@ -33,5 +32,16 @@ public class PeopleController {
         //Получим 1 человека и передадим на отображение в представление
         model.addAttribute("person", personDAO.show(id));
         return "people/show";
+    }
+
+    @GetMapping("/new")
+    public String newPerson(@ModelAttribute("person") Person person){
+        return "people/new";
+    }
+
+    @PostMapping()
+    public String create(@ModelAttribute("person") Person person){
+        personDAO.save(person);
+        return "redirect:/people";
     }
 }
